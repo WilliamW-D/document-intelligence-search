@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Intelligence Search System - Hybrid RRF & Citation Engine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top App Header -->
+        <header class="header">
+            <div class="brand">
+                <div class="logo-icon">🔍</div>
+                <div>
+                    <h1>Document Intelligence Search</h1>
+                    <p class="subtitle">Hybrid Vector + Keyword Reciprocal Rank Fusion & Citation Attribution Engine</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="badge live-badge">● HYBRID SEARCH ACTIVE</div>
+                <button class="btn btn-secondary" onclick="openDocCatalogModal()">Document Catalog</button>
+                <button class="btn btn-primary" onclick="runBenchmarkEval()">Run Retrieval Benchmark</button>
+            </div>
+        </header>
+
+        <!-- Search Control Bar -->
+        <section class="search-panel">
+            <div class="search-input-wrapper">
+                <span class="search-icon">🔎</span>
+                <input type="text" id="query-input" placeholder="Ask any question across enterprise policies, security, or financial documents..." value="What are the data retention and archival guidelines?" onkeydown="handleKeyDown(event)">
+                <button class="btn btn-primary" onclick="executeSearch()">Search Documents</button>
+            </div>
+
+            <div class="search-controls">
+                <div class="control-group">
+                    <label>Search Mode:</label>
+                    <div class="toggle-buttons">
+                        <button class="toggle-btn active" id="btn-mode-hybrid" onclick="setSearchMode('hybrid')">Hybrid (RRF)</button>
+                        <button class="toggle-btn" id="btn-mode-semantic" onclick="setSearchMode('semantic')">Semantic Vector</button>
+                        <button class="toggle-btn" id="btn-mode-keyword" onclick="setSearchMode('keyword')">Keyword (BM25)</button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="category-select">Metadata Filter:</label>
+                    <select id="category-select" onchange="executeSearch()">
+                        <option value="ALL">All Categories</option>
+                        <option value="Policy">Policy</option>
+                        <option value="Security">Security</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Operations">Operations</option>
+                    </select>
+                </div>
+
+                <div class="control-group sliders">
+                    <label>RRF Weight: <span id="weight-val">Semantic 60% / Keyword 40%</span></label>
+                    <input type="range" id="weight-slider" min="0" max="1" step="0.1" value="0.6" oninput="updateWeights(this.value)">
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Search Results & Citation Split View -->
+        <main class="main-layout">
+            <!-- Left: Search Results Column -->
+            <section class="results-column">
+                <div class="section-header">
+                    <h2 id="results-count">Ranked Search Results (5 Sources Found)</h2>
+                    <span class="sub-tag" id="search-mode-tag">RRF Hybrid Fusion</span>
+                </div>
+                <div class="results-list" id="results-list">
+                    <!-- Dynamic Search Result Cards Inserted Here -->
+                </div>
+            </section>
+
+            <!-- Right: Citation & Source Inspector Drawer -->
+            <aside class="citation-column">
+                <div class="section-header">
+                    <h2>Citation & Source Attribution</h2>
+                    <span class="sub-tag cyan">Source Context</span>
+                </div>
+                <div class="citation-inspector" id="citation-inspector">
+                    <div class="empty-state">
+                        <span class="empty-icon">📄</span>
+                        <p>Select any search result or citation key [1] to inspect full source text, metadata bounds, and character offsets.</p>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Evaluation Benchmark Modal -->
+        <div class="modal-overlay" id="eval-modal">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h3>🏆 Retrieval Quality Evaluation Suite (Benchmark Results)</h3>
+                    <button class="close-btn" onclick="closeEvalModal()">×</button>
+                </div>
+                <div class="modal-body" id="eval-modal-body">
+                    <div class="loading-spinner">Evaluating Hit@K and Mean Reciprocal Rank (MRR)...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Document Catalog Modal -->
+        <div class="modal-overlay" id="catalog-modal">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h3>📚 Ingested Document Catalog & Version History</h3>
+                    <button class="close-btn" onclick="closeCatalogModal()">×</button>
+                </div>
+                <div class="modal-body" id="catalog-modal-body">
+                    <!-- Dynamic Document Catalog List -->
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Document Intelligence Search System • Engineered with FastAPI + PostgreSQL pgvector + Hybrid RRF</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
